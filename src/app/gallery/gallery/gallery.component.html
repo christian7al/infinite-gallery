@@ -1,0 +1,31 @@
+<main
+  fxLayout="column"
+  fxLayoutAlign="center"
+  ngStyle.sm="margin: 0 10%"
+  ngStyle.md="margin: 0 20%"
+  ngStyle.lg="margin: 0 30%"
+>
+  <div class="search-area" fxLayout="column" fxLayoutAlign="center center">
+    <infinite-search></infinite-search>
+    <div *ngIf="searchService.keyword.getValue().length" class="results" fxLayout="column">
+      <h2>
+        Here are the results for: {{searchService.keyword.getValue()}}
+      </h2>
+      <small>Displaying {{imageList.length}} images</small>
+    </div>
+
+  </div>
+
+  <div class="gallery-area"  fxLayout="column wrap">
+    <div gallerize>
+      <img src="{{image.url}}" *ngFor="let image of imageList">
+    </div>
+  </div>
+  <div
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="50"
+    (scrolled)="onScroll()">
+  </div>
+
+</main>

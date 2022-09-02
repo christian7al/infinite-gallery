@@ -1,0 +1,10 @@
+<mat-form-field appearance="outline">
+  <mat-label>Search for an image here</mat-label>
+  <input
+    matInput
+    [formControl]="searchTerm"
+    placeholder="For example: tree"
+    (keyup)="triggerSearch()"
+  >
+</mat-form-field>
+
