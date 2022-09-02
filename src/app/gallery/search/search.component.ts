@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { SearchService } from '../services/search.service';
 
@@ -7,17 +7,19 @@ import { SearchService } from '../services/search.service';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.sass']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent {
 
-  readonly searchTerm = new FormControl()
+  searchTerm = new FormControl()
 
-  constructor(private searchService: SearchService) { }
-
-  ngOnInit(): void {
-  }
+  constructor(public searchService: SearchService) { }
 
   triggerSearch() {
     this.searchService.keyword.next(this.searchTerm.value)
+  }
+
+  clearValue() {
+    this.searchTerm.setValue('')
+    this.triggerSearch()
   }
 
 }

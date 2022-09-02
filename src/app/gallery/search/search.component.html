@@ -1,4 +1,4 @@
-<mat-form-field appearance="outline">
+<mat-form-field appearance="standard">
   <mat-label>Search for an image here</mat-label>
   <input
     matInput
@@ -6,5 +6,10 @@
     placeholder="For example: tree"
     (keyup)="triggerSearch()"
   >
+  <button *ngIf="searchTerm.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearValue()">
+    <mat-icon>close</mat-icon>
+  </button>
+  <mat-hint *ngIf="searchService.keyword.getValue().length">
+    Here are the results for: <u>{{searchService.keyword.getValue()}}</u>
+  </mat-hint>
 </mat-form-field>
-

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, debounceTime, map, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, debounceTime, finalize, map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class SearchService {
   public keyword = new BehaviorSubject<string>('')
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private loadingService: LoadingService
   ) {
     this.apiKey = environment.flickrApiKey
   }
@@ -25,10 +27,12 @@ export class SearchService {
   }
 
   searchForPhotos(page: number): Observable<any> {
+    this.loadingService.startLoading()
     const fullUrl = this.getFullUrl(page)
     return this.http.get(fullUrl)
     .pipe(
       debounceTime(1000),
+      finalize(() => this.loadingService.stopLoading()),
       map((res: any) => {
         return res.photos.photo.map((pic: any) => {
           return {

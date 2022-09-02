@@ -1,31 +1,57 @@
 <main
-  fxLayout="column"
-  fxLayoutAlign="center"
-  ngStyle.sm="margin: 0 10%"
-  ngStyle.md="margin: 0 20%"
-  ngStyle.lg="margin: 0 30%"
+  [ngSwitch]="searchService.keyword.getValue().length"
 >
-  <div class="search-area" fxLayout="column" fxLayoutAlign="center center">
-    <infinite-search></infinite-search>
-    <div *ngIf="searchService.keyword.getValue().length" class="results" fxLayout="column">
-      <h2>
-        Here are the results for: {{searchService.keyword.getValue()}}
-      </h2>
-      <small>Displaying {{imageList.length}} images</small>
+  <mat-toolbar
+    fxLayout="column"
+    fxLayoutAlign="end center"
+    ngStyle.sm="padding: 0 5%"
+    ngStyle.md="padding: 0 10%"
+    ngStyle.lg="padding: 0 20%"
+  >
+    <h2 class="title">Infinite Gallery</h2>
+    <div
+      class="search-wrapper"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+    >
+      <infinite-search></infinite-search>
     </div>
+  </mat-toolbar>
 
-  </div>
-
-  <div class="gallery-area"  fxLayout="column wrap">
-    <div gallerize>
-      <img src="{{image.url}}" *ngFor="let image of imageList">
-    </div>
-  </div>
   <div
-    infiniteScroll
-    [infiniteScrollDistance]="2"
-    [infiniteScrollThrottle]="50"
-    (scrolled)="onScroll()">
+    class="no-search"
+    fxLayout="column"
+    *ngSwitchCase="0"
+    fxLayoutAlign="center center"
+  >
+    <img src="https://img.freepik.com/free-vector/illustration-magnifying-glass-icon_53876-5613.jpg?w=1480&t=st=1662146948~exp=1662147548~hmac=509e6c3503041bc156c85d6d3dd9be31ec85706ceff6deba32ded4caf129343f" alt="">
+    <h3>Try searching for something...</h3>
   </div>
 
+  <div class="search-results">
+    <mat-grid-list
+      cols="3"
+      gallerize
+      gutterSize="15px"
+      ngStyle.sm="margin: 0 5%"
+      ngStyle.md="margin: 0 10%"
+      ngStyle.lg="margin: 0 20%"
+      *ngSwitchDefault
+    >
+      <mat-grid-tile
+        [class.mat-elevation-z10]="true"
+        class="img-wrapper"
+        *ngFor="let image of imageList"
+      >
+        <img  mat-card-image src="{{image.url}}" >
+      </mat-grid-tile>
+    </mat-grid-list>
+    <infinite-loading></infinite-loading>
+    <div
+      infiniteScroll
+      [infiniteScrollDistance]="2"
+      [infiniteScrollThrottle]="50"
+      (scrolled)="onScroll()">
+    </div>
+  </div>
 </main>

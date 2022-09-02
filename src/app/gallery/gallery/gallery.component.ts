@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Gallery, GalleryRef, ImageSize, ThumbnailsPosition } from 'ng-gallery';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Gallery } from 'ng-gallery';
 import { Lightbox } from 'ng-gallery/lightbox';
+import { Subject, takeUntil } from 'rxjs';
 import { SearchService } from '../services/search.service';
 
 @Component({
@@ -8,10 +9,11 @@ import { SearchService } from '../services/search.service';
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.sass']
 })
-export class GalleryComponent implements OnInit {
+export class GalleryComponent implements OnInit, OnDestroy {
 
   imageList: any[] = []
   page: number = 1
+  private ngUnsubscribe = new Subject<void>()
 
   constructor(
     public searchService: SearchService,
@@ -21,26 +23,40 @@ export class GalleryComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchService.keyword.asObservable()
-    .subscribe(() => {
-      this.loadPhotos()
+    .pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+    .subscribe((keyword) => {
+      if (keyword.length) {
+        this.loadPhotos()
+      } else {
+        this.imageList = []
+      }
     })
+  }
+
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next()
+    this.ngUnsubscribe.complete()
   }
 
   loadPhotos() {
     this.searchService.searchForPhotos(this.page)
+    .pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
     .subscribe(photos => {
-      if (!photos.length) {
-        this.imageList = []
-      } else {
-        this.imageList = [...photos]
-      }
+        this.imageList = photos
     })
   }
 
   onScroll() {
     const keyword = this.searchService.keyword.getValue()
     if (keyword && keyword.length > 0) {
-      this.searchService.searchForPhotos(this.page++)
+      this.searchService.searchForPhotos(++this.page)
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe((photos) => {
         this.imageList = this.imageList.concat(photos)
       })

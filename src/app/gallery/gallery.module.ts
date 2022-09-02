@@ -13,12 +13,19 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { GalleryModule } from 'ng-gallery';
 import { LightboxModule } from  'ng-gallery/lightbox';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatCardModule} from '@angular/material/card';
+import { LoadingComponent } from './loading/loading.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatButtonModule} from '@angular/material/button';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
   declarations: [
     GalleryComponent,
-    SearchComponent
+    SearchComponent,
+    LoadingComponent
   ],
   imports: [
     CommonModule,
@@ -26,6 +33,7 @@ import { LightboxModule } from  'ng-gallery/lightbox';
     FlexLayoutModule,
     ReactiveFormsModule,
     MatFormFieldModule,
+    BrowserAnimationsModule,
     MatInputModule,
     MatIconModule,
     FormsModule,
@@ -33,7 +41,13 @@ import { LightboxModule } from  'ng-gallery/lightbox';
     InfiniteScrollModule,
     MatGridListModule,
     GalleryModule,
-    LightboxModule
+    MatToolbarModule,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatCardModule,
+    LightboxModule.withConfig({
+      panelClass: 'fullscreen'
+    })
   ],
   exports: [
     GalleryComponent,

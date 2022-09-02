@@ -21,8 +21,6 @@
     "@angular/platform-browser": "^14.0.0",
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@angular/router": "^14.0.0",
-    "flickr-sdk": "^6.0.0",
-    "hammerjs": "^2.0.8",
     "ng-gallery": "^7.0.4",
     "ngx-infinite-scroll": "^14.0.0",
     "rxjs": "~7.5.0",
